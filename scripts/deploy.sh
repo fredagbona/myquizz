@@ -10,9 +10,9 @@ cd $deploy_dir
 git pull origin main
 
 # Installation des dépendances
-npm ci --only=production
+npm install
 
 # Rdeploi avec pm2
 
-pm2 reload ecosystem.config.js --env production
+pm2 reload ecosystem.config.js 
 pm2 save

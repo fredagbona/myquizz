@@ -22,7 +22,7 @@ jobs:
           cache: 'npm'
 
       - name: Installer les dépendances en prod
-        run: npm ci --only=production
+        run: npm install
 
       - name: Debug
         run: echo "Host  ${{secrets.PROD_HOST}}"
@@ -36,6 +36,6 @@ jobs:
           port: ${{secrets.PROD_PORT}}
           script: |
             cd /var/www/myquizz
-            npm ci --only=production
-            pm2 reload ecosystem.config.js --env production
+            npm install
+            pm2 reload ecosystem.config.js 
             pm2 save 
