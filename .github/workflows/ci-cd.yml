@@ -24,6 +24,9 @@ jobs:
       - name: Installer les dépendances en prod
         run: npm ci --only=production
 
+      - name: Debug
+        run: echo "Host : ${{secrets.PROD_HOST}}"  
+
       - name: Déploiement via SSH sur le vps
         uses: appleboy/ssh-action@v1
         with: 
