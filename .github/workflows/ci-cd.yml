@@ -1,0 +1,38 @@
+name: CI/CD Quizz
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  NODE_VERSION: '18'    
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Déploiement prod
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Installer les dépendances en prod
+        run: npm ci --only=production
+
+      - name: Déploiement via SSH sur le vps
+        uses: appleboy/ssh-action@v1
+        with: 
+          host: ${{secrets.PROD_HOST}}
+          username: ${{secrets.PROD_USER}}
+          key: ${{secrets.PROD_KEY}}
+          port: ${{secrets.PROD_PORT}}
+          script: |
+            cd /var/www/myquizz
+            npm ci --only=production
+            pm2 reload ecosystem.config.js --env production
+            pm2 save 
